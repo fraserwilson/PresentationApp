@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../crud_bloc_Home.dart';
+import 'crud_bloc_Home.dart';
 import '../cubits/auth_cubit.dart';
 import '../cubits/auth_state.dart';
 import '../cubits/product_cubit.dart';
@@ -43,21 +43,9 @@ class _RegisterPageState extends State<RegisterPage> {
       body: BlocListener<AuthCubit, AuthState>(
         listener: (context, state) {
           if (state is AuthenticatedState) {
-            Navigator.push(
+            Navigator.pushNamed(
                 context,
-                MaterialPageRoute(
-                    builder: (_) => MultiBlocProvider(
-                        providers: [
-                          BlocProvider<ProductCubit>(
-                              create: (context) =>
-                                  ProductCubit(repo: widget.repo)),
-                          BlocProvider<AuthCubit>(
-                              create: (context) =>
-                                  AuthCubit(repo: widget.authRepo)),
-                        ],
-                        child: ShoppingListApp(
-                          repo: widget.repo,
-                        )))).then((value){
+                "shoppinglist").then((value){
               emailController.clear();
               passwordController.clear();
             });

@@ -37,14 +37,9 @@ class _LandingPageState extends State<LandingPage> {
                   width: MediaQuery.of(context).size.width / 3,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.push(
+                      Navigator.pushNamed(
                         context,
-                        MaterialPageRoute(
-                            builder: (_) => BlocProvider.value(
-                                value: BlocProvider.of<AuthCubit>(context),
-                                child: LoginPage(repo: widget.repo,authRepo: widget.authRepo,),
-                                ),
-                        ),
+                        "login"
                       );
                     },
                     child: Text(
@@ -62,14 +57,9 @@ class _LandingPageState extends State<LandingPage> {
                   width: MediaQuery.of(context).size.width / 3,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.push(
+                      Navigator.pushNamed(
                         context,
-                        MaterialPageRoute(
-                          builder: (_) => BlocProvider.value(
-                            value: BlocProvider.of<AuthCubit>(context),
-                            child: RegisterPage(repo: widget.repo ,authRepo: widget.authRepo,),
-                          ),
-                        ),
+                        "register"
                       );
                     },
                     child: Text(

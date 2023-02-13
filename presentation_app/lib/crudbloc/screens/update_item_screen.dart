@@ -4,7 +4,7 @@ import 'package:presentation_app/crudbloc/models/products.dart';
 import '../cubits/product_cubit.dart';
 
 class UpdateItem extends StatefulWidget {
-  const UpdateItem({
+   UpdateItem({
     Key? key,
     required this.product, required this.products,
   }) : super(key: key);

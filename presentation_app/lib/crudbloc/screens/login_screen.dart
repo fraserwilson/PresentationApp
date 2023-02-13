@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:presentation_app/crudbloc/crud_bloc_Home.dart';
+import 'package:presentation_app/crudbloc/screens/crud_bloc_Home.dart';
 import 'package:presentation_app/crudbloc/cubits/auth_cubit.dart';
 import 'package:presentation_app/crudbloc/cubits/auth_state.dart';
 import 'package:presentation_app/crudbloc/cubits/product_cubit.dart';
@@ -42,21 +42,10 @@ class _LoginPageState extends State<LoginPage> {
       body: BlocListener<AuthCubit, AuthState>(
         listener: (context, state) {
           if (state is AuthenticatedState) {
-            Navigator.push(
+            Navigator.pushNamed(
                 context,
-                MaterialPageRoute(
-                    builder: (_) => MultiBlocProvider(
-                            providers: [
-                              BlocProvider<ProductCubit>(
-                                  create: (context) =>
-                                      ProductCubit(repo: widget.repo)),
-                              BlocProvider<AuthCubit>(
-                                  create: (context) =>
-                                      AuthCubit(repo: widget.authRepo)),
-                            ],
-                            child: ShoppingListApp(
-                              repo: widget.repo,
-                            )))).then((value){
+              "shoppinglist"
+            ).then((value){
                               emailController.clear();
                               passwordController.clear();
             });
