@@ -4,45 +4,37 @@ import 'package:presentation_app/crudbloc/models/user.dart';
 import 'package:presentation_app/crudbloc/repos/auth_repository.dart';
 
 class AuthCubit extends Cubit<AuthState> {
-  AuthCubit({required this.repo}) : super(UnAuthenticatedState()) {
-    UnAuthenticatedState();
+  AuthCubit({required this.repo}) : super(InitialState()) {
+    InitialState();
   }
   final AuthRepo repo;
 
-  Future<AuthUser> LoginUser(String email, String password) async {
-    var user = AuthUser(userId: '', email: email, password: password);
+  void LoginUser(String email, String password) async {
     try {
-      emit(UnAuthenticatedState());
-      user = await repo.loginWithEmailPassword(email.trim(), password);
-      emit(AuthenticatedState());
-      return user;
+      emit(UnAuthenticatedState(state.mainAuthState));
+      var user = await repo.loginWithEmailPassword(email.trim(), password);
+      emit(AuthenticatedState(state.mainAuthState));
     } catch (e) {
-      print(e);
+      emit(AuthErrorState(state.mainAuthState, e.toString()));
     }
-    return user;
   }
 
-  Future<AuthUser> registerUser(String email, String password) async {
-    var user = AuthUser(userId: '', email: email, password: password);
+  void registerUser(String email, String password) async {
     try {
-      emit(UnAuthenticatedState());
-      user = await repo.registerWithEmailPassword(email, password);
-      emit(AuthenticatedState());
-      return user;
+      emit(UnAuthenticatedState(state.mainAuthState));
+      var user = await repo.registerWithEmailPassword(email, password);
+      emit(AuthenticatedState(state.mainAuthState));
     } catch (e) {
-      print(e);
-      emit(AuthErrorState());
+      emit(AuthErrorState(state.mainAuthState, e.toString()));
     }
-    return user;
   }
 
   Future<void> signOutOfApp() async{
     try{
       await repo.signOut();
-      emit(UnAuthenticatedState());
+      emit(UnAuthenticatedState(state.mainAuthState));
     }catch (e){
-      print(e);
-      emit(AuthErrorState());
+      emit(AuthErrorState(state.mainAuthState, e.toString()));
     }
   }
 

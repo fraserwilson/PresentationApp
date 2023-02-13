@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:presentation_app/crudbloc/routes.dart';
 import 'package:presentation_app/crudbloc/screens/crud_bloc_Home.dart';
 import 'package:presentation_app/crudbloc/cubits/auth_cubit.dart';
 import 'package:presentation_app/crudbloc/cubits/auth_state.dart';
@@ -42,12 +43,9 @@ class _LoginPageState extends State<LoginPage> {
       body: BlocListener<AuthCubit, AuthState>(
         listener: (context, state) {
           if (state is AuthenticatedState) {
-            Navigator.pushNamed(
-                context,
-              "shoppinglist"
-            ).then((value){
-                              emailController.clear();
-                              passwordController.clear();
+            Navigator.pushNamed(context, shoppingList).then((value) {
+              emailController.clear();
+              passwordController.clear();
             });
           }
           if (state is AuthErrorState) {
@@ -69,9 +67,9 @@ class _LoginPageState extends State<LoginPage> {
                       labelText: "Email",
                       border: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: Colors.black,
-                            width: 2.0,
-                          ))),
+                        color: Colors.black,
+                        width: 2.0,
+                      ))),
                 ),
                 SizedBox(
                   height: 10.0,
@@ -94,17 +92,16 @@ class _LoginPageState extends State<LoginPage> {
                       labelText: "Password",
                       border: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: Colors.black,
-                            width: 2.0,
-                          ))),
+                        color: Colors.black,
+                        width: 2.0,
+                      ))),
                 ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width / 2,
                   child: ElevatedButton(
                     onPressed: () async {
                       BlocProvider.of<AuthCubit>(context).LoginUser(
-                          emailController.text.trim(),
-                          passwordController.text);
+                          emailController.text.trim(), passwordController.text);
                     },
                     child: Text(
                       "Login",

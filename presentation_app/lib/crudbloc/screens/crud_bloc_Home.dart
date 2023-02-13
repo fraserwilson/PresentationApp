@@ -5,7 +5,9 @@ import 'package:presentation_app/crudbloc/cubits/auth_state.dart';
 import 'package:presentation_app/crudbloc/cubits/product_cubit.dart';
 import 'package:presentation_app/crudbloc/cubits/product_state.dart';
 import 'package:presentation_app/crudbloc/models/products.dart';
+import 'package:presentation_app/crudbloc/models/update_products.dart';
 import 'package:presentation_app/crudbloc/repos/products_repository.dart';
+import 'package:presentation_app/crudbloc/routes.dart';
 import 'package:presentation_app/crudbloc/screens/update_item_screen.dart';
 
 class ShoppingListApp extends StatefulWidget {
@@ -31,7 +33,8 @@ class _ShoppingListAppState extends State<ShoppingListApp> {
   }
 
   getProducts() async {
-    products = await BlocProvider.of<ProductCubit>(context).getAllProducts();
+    await BlocProvider.of<ProductCubit>(context).getAllProducts();
+    products = BlocProvider.of<ProductCubit>(context).state.mainProductState.products!;
   }
 
   @override
@@ -91,16 +94,9 @@ class _ShoppingListAppState extends State<ShoppingListApp> {
                           borderRadius: BorderRadius.circular(5),
                         ),
                         onTap: () {
-                          Navigator.push(
+                          Navigator.pushNamed(
                               context,
-                              MaterialPageRoute(
-                                  builder: (_) => BlocProvider<ProductCubit>(
-                                      create: (context) =>
-                                          ProductCubit(repo: widget.repo),
-                                      child: UpdateItem(
-                                        product: products[index],
-                                        products: products,
-                                      ))));
+                              updateItem, arguments: UpdateProducts(products[index], products));
                         },
                         title: Text(products[index].title ??
                             "Item Could Not Be Loaded"),
@@ -289,18 +285,6 @@ class _ShoppingListAppState extends State<ShoppingListApp> {
               }
             },
             listener: (context, state) {
-              if (state is AddedState) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text("Added successfully")));
-              }
-              if (state is DeletedState) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text("Deleted successfully")));
-              }
-              if (state is UpdatedState) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text("Updated successfully")));
-              }
               if (state is ErrorState) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text(
@@ -311,11 +295,11 @@ class _ShoppingListAppState extends State<ShoppingListApp> {
     );
   }
 
-  Widget showAlertDialog(BuildContext context) {
+  Widget showAlertDialog(BuildContext con) {
     return AlertDialog(
       title: Text("Delete Item Dialog"),
       content: SizedBox(
-        height: MediaQuery.of(context).size.height / 2,
+        height: MediaQuery.of(con).size.height / 2,
         child: Column(
           children: [
             Text("Which item would you like to delete?"),
@@ -330,7 +314,7 @@ class _ShoppingListAppState extends State<ShoppingListApp> {
                 onPressed: () {
                   BlocProvider.of<ProductCubit>(context)
                       .deleteProducts(products, 0);
-                  Navigator.of(context).pop();
+                  Navigator.pop(con);
                 },
                 child: Text(
                   "Remove first item in list",
@@ -349,7 +333,7 @@ class _ShoppingListAppState extends State<ShoppingListApp> {
                 onPressed: () {
                   BlocProvider.of<ProductCubit>(context)
                       .deleteProducts(products, (products.length - 1));
-                  Navigator.of(context).pop();
+                  Navigator.pop(con);
                 },
                 child: Text(
                   "Remove last item in list",

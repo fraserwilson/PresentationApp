@@ -1,6 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:presentation_app/crudbloc/models/products.dart';
+import 'package:presentation_app/crudbloc/routes.dart';
 import 'package:presentation_app/crudbloc/screens/crud_bloc_Home.dart';
 import 'package:presentation_app/crudbloc/cubits/auth_cubit.dart';
 import 'package:presentation_app/crudbloc/cubits/product_cubit.dart';
@@ -78,51 +80,17 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final AuthCubit _authCubit = AuthCubit(repo: widget.authRepo);
-    final ProductCubit _productCubit = ProductCubit(repo: widget.repo);
-    return MaterialApp(
+    return MultiBlocProvider(providers: [
+      BlocProvider<ProductCubit>(create: (context) => ProductCubit(repo: widget.repo)),
+      BlocProvider<AuthCubit>(create: (context) => AuthCubit(repo: widget.authRepo)),
+    ], child: MaterialApp(
       routes: {
-        '/': (context) => widget.apptype
-            ? MultiBlocProvider(
-                providers: [
-                    BlocProvider.value(value: _productCubit),
-                    BlocProvider.value(value: _authCubit),
-                  ],
-                child: LandingPage(
-                  repo: widget.repo,
-                  authRepo: widget.authRepo,
-                ))
-            : WebViewTester(
-                controller: controller,
-              ),
-        'shoppinglist': (context) => MultiBlocProvider(
-              providers: [
-                BlocProvider.value(value: _productCubit),
-                BlocProvider.value(value: _authCubit),
-              ],
-              child: ShoppingListApp(repo: widget.repo),
-            ),
-        'login': (context) => MultiBlocProvider(
-              providers: [
-                BlocProvider.value(value: _productCubit),
-                BlocProvider.value(value: _authCubit),
-              ],
-              child: LoginPage(
-                repo: widget.repo,
-                authRepo: widget.authRepo,
-              ),
-            ),
-        'register': (context) => MultiBlocProvider(
-              providers: [
-                BlocProvider.value(value: _productCubit),
-                BlocProvider.value(value: _authCubit),
-              ],
-              child: RegisterPage(
-                repo: widget.repo,
-                authRepo: widget.authRepo,
-              ),
-            ),
+        home: (context) => widget.apptype ? LandingPage(repo: widget.repo, authRepo: widget.authRepo) : WebViewTester(controller: controller),
+        shoppingList: (context) => ShoppingListApp(repo: widget.repo),
+        login: (context) => LoginPage(repo: widget.repo, authRepo: widget.authRepo),
+        register: (context) => RegisterPage(repo: widget.repo, authRepo: widget.authRepo),
+        updateItem: (context) => UpdateItem(),
       },
-    );
+    ));
   }
 }

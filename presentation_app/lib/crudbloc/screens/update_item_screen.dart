@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:presentation_app/crudbloc/models/products.dart';
+import 'package:presentation_app/crudbloc/models/update_products.dart';
 import '../cubits/product_cubit.dart';
 
 class UpdateItem extends StatefulWidget {
-   UpdateItem({
-    Key? key,
-    required this.product, required this.products,
-  }) : super(key: key);
-  final Products product;
-  final List<Products> products;
+  const UpdateItem();
 
   @override
   State<UpdateItem> createState() => _UpdateItemState();
@@ -22,6 +18,8 @@ class _UpdateItemState extends State<UpdateItem> {
   final categoryController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+
+    var updateInformation = ModalRoute.of(context)!.settings.arguments! as UpdateProducts;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -40,7 +38,7 @@ class _UpdateItemState extends State<UpdateItem> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
-                  controller: titleController..text = widget.product.title,
+                  controller: titleController..text = updateInformation.product.title,
                   textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
                       labelText: "Item Title",
@@ -55,7 +53,7 @@ class _UpdateItemState extends State<UpdateItem> {
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
                   controller: priceController
-                    ..text = widget.product.price.toString(),
+                    ..text = updateInformation.product.price.toString(),
                   textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
                       labelText: "Item Price",
@@ -69,7 +67,7 @@ class _UpdateItemState extends State<UpdateItem> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
-                  controller: categoryController..text = widget.product.category!,
+                  controller: categoryController..text = updateInformation.product.category!,
                   textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
                       labelText: "Item Category",
@@ -84,7 +82,7 @@ class _UpdateItemState extends State<UpdateItem> {
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
                   controller: descriptionController
-                    ..text = widget.product.description!,
+                    ..text = updateInformation.product.description!,
                   textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
                       labelText: "Item Description",
@@ -101,10 +99,10 @@ class _UpdateItemState extends State<UpdateItem> {
                     width: MediaQuery.of(context).size.width / 2,
                     child: ElevatedButton(
                       onPressed: () {
-                        Products product = Products(id: widget.product.id, title: titleController.text, price: double.parse(priceController.text), image: widget.product.image, category: categoryController.text, description: descriptionController.text);
+                        Products product = Products(id: updateInformation.product.id  , title: titleController.text, price: double.parse(priceController.text), image: updateInformation.product.image, category: categoryController.text, description: descriptionController.text);
                         BlocProvider.of<ProductCubit>(context)
-                            .updateProducts(product, widget.products);
-                        Navigator.of(context).pop(product);
+                            .updateProducts(product, updateInformation.products);
+                        //Navigator.of(context).pop(product);
                       },
                       child: Text(
                         'Update item',

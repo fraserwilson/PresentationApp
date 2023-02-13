@@ -1,20 +1,48 @@
 import 'package:equatable/equatable.dart';
+import 'package:presentation_app/crudbloc/models/user.dart';
 
-abstract class AuthState extends Equatable {}
+class MainAuthState extends Equatable{
+
+  final AuthUser? user;
+
+  MainAuthState({this.user});
+
+  MainAuthState copyWith({
+    AuthUser? user,
+  }) {
+    return MainAuthState(
+      user: user ?? this.user,
+    );
+  }
+
+  @override
+  List<Object?> get props => [user];
+
+}
+
+abstract class AuthState extends Equatable {
+  final MainAuthState mainAuthState;
+
+  AuthState(this.mainAuthState);
+
+  @override
+  List<Object?> get props => [mainAuthState];
+}
+
+class InitialState extends AuthState{
+  InitialState(): super(MainAuthState());
+}
 
 class UnAuthenticatedState extends AuthState {
-  @override
-  List<Object> get props => [];
+  UnAuthenticatedState(super.authState);
 }
 
 class AuthenticatedState extends AuthState {
-  AuthenticatedState();
-
-  @override
-  List<Object> get props => [];
+  AuthenticatedState(super.authState);
 }
 
 class AuthErrorState extends AuthState {
-  @override
-  List<Object> get props => [];
+  final String? error;
+
+  AuthErrorState(super.authState, this.error);
 }

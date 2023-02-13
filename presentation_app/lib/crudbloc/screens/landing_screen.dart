@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:presentation_app/crudbloc/cubits/auth_cubit.dart';
 import 'package:presentation_app/crudbloc/repos/auth_repository.dart';
 import 'package:presentation_app/crudbloc/repos/products_repository.dart';
+import 'package:presentation_app/crudbloc/routes.dart';
 import 'package:presentation_app/crudbloc/screens/login_screen.dart';
 import 'package:presentation_app/crudbloc/screens/register_page.dart';
 
@@ -39,7 +40,7 @@ class _LandingPageState extends State<LandingPage> {
                     onPressed: () {
                       Navigator.pushNamed(
                         context,
-                        "login"
+                        login
                       );
                     },
                     child: Text(
@@ -59,7 +60,7 @@ class _LandingPageState extends State<LandingPage> {
                     onPressed: () {
                       Navigator.pushNamed(
                         context,
-                        "register"
+                        register
                       );
                     },
                     child: Text(

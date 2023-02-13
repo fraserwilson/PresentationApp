@@ -6,7 +6,7 @@ import 'package:presentation_app/crudbloc/models/products.dart';
 import '../repos/products_repository.dart';
 
 class ProductCubit extends Cubit<ProductState>{
-  ProductCubit({required this.repo}) : super(LoadingState()){
+  ProductCubit({required this.repo}) : super(InitialState()){
     getAllProducts();
   }
 
@@ -15,48 +15,42 @@ final ApiService repo;
   Future<List<Products>> getAllProducts() async {
     var products = <Products>[];
     try {
-      emit(LoadingState());
+      emit(LoadingState(state.mainProductState));
       products = await repo.getAllProducts();
-      emit(LoadedState(products));
+      emit(LoadedState(state.mainProductState.copyWith(products: products)));
     } catch (e) {
-      emit(ErrorState());
+      emit(ErrorState(state.mainProductState, e.toString()));
     }
     return products;
   }
 
-  Future<List<Products>> addProducts(Products product, List<Products> products) async{
+  void addProducts(Products product, List<Products> products) async{
     try{
-      emit(LoadingState());
-      await repo.addProduct(product, products);
-      emit(LoadedState(products));
-      return products;
+      emit(LoadingState(state.mainProductState));
+      var addedProduct = await repo.addProduct(product, products);
+      emit(LoadedState(state.mainProductState.copyWith(products: addedProduct)));
     }catch(e){
-      emit(ErrorState());
-      return [];
+      emit(ErrorState(state.mainProductState, e.toString()));
     }
   }
 
-  Future<List<Products>> deleteProducts(List<Products> products, int index) async{
+  void deleteProducts(List<Products> products, int index) async{
     try{
-      emit(LoadingState());
-      await repo.deleteProduct(products,index);
-      emit(LoadedState(products));
-      return products;
+      emit(LoadingState(state.mainProductState));
+      var deletedProducts = await repo.deleteProduct(products,index);
+      emit(LoadedState(state.mainProductState));
     }catch(e){
-      emit(ErrorState());
-      return [];
+      emit(ErrorState(state.mainProductState, e.toString()));
     }
   }
 
-  Future<List<Products>> updateProducts(Products product, List<Products> products) async{
+  void updateProducts(Products product, List<Products> products) async{
     try{
-      emit(LoadingState());
+      emit(LoadingState(state.mainProductState));
       var newProducts = await repo.updateProduct(product,products);
-      emit(LoadedState(newProducts));
-      return products;
+      emit(LoadedState(state.mainProductState.copyWith(products: newProducts)));
     }catch(e){
-      emit(ErrorState());
-      return [];
+      emit(ErrorState(state.mainProductState, e.toString()));
     }
   }
 }

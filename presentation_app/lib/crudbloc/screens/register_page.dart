@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../routes.dart';
 import 'crud_bloc_Home.dart';
 import '../cubits/auth_cubit.dart';
 import '../cubits/auth_state.dart';
@@ -9,7 +10,8 @@ import '../repos/auth_repository.dart';
 import '../repos/products_repository.dart';
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({Key? key, required this.repo, required this.authRepo}) : super(key: key);
+  const RegisterPage({Key? key, required this.repo, required this.authRepo})
+      : super(key: key);
   final ApiService repo;
   final AuthRepo authRepo;
 
@@ -18,7 +20,6 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-
   bool loginPassword = true;
   void _toggle() {
     setState(() {
@@ -43,9 +44,7 @@ class _RegisterPageState extends State<RegisterPage> {
       body: BlocListener<AuthCubit, AuthState>(
         listener: (context, state) {
           if (state is AuthenticatedState) {
-            Navigator.pushNamed(
-                context,
-                "shoppinglist").then((value){
+            Navigator.pushNamed(context, shoppingList).then((value) {
               emailController.clear();
               passwordController.clear();
             });
@@ -69,9 +68,9 @@ class _RegisterPageState extends State<RegisterPage> {
                       labelText: "Email",
                       border: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: Colors.black,
-                            width: 2.0,
-                          ))),
+                        color: Colors.black,
+                        width: 2.0,
+                      ))),
                 ),
                 SizedBox(
                   height: 10.0,
@@ -94,17 +93,16 @@ class _RegisterPageState extends State<RegisterPage> {
                       labelText: "Password",
                       border: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: Colors.black,
-                            width: 2.0,
-                          ))),
+                        color: Colors.black,
+                        width: 2.0,
+                      ))),
                 ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width / 2,
                   child: ElevatedButton(
                     onPressed: () async {
                       BlocProvider.of<AuthCubit>(context).LoginUser(
-                          emailController.text.trim(),
-                          passwordController.text);
+                          emailController.text.trim(), passwordController.text);
                     },
                     child: Text(
                       "Login",
