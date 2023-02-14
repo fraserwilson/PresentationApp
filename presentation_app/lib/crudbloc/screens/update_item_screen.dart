@@ -16,11 +16,12 @@ class _UpdateItemState extends State<UpdateItem> {
   final priceController = TextEditingController();
   final descriptionController = TextEditingController();
   final categoryController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-
     var updateInformation = ModalRoute.of(context)!.settings.arguments! as UpdateProducts;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Colors.white,
         centerTitle: true,
@@ -38,9 +39,10 @@ class _UpdateItemState extends State<UpdateItem> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
-                  controller: titleController..text = updateInformation.product.title,
+                  controller: titleController,
                   textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
+                    hintText: updateInformation.product.title,
                       labelText: "Item Title",
                       border: OutlineInputBorder(
                           borderSide: BorderSide(
@@ -52,10 +54,10 @@ class _UpdateItemState extends State<UpdateItem> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
-                  controller: priceController
-                    ..text = updateInformation.product.price.toString(),
+                  controller: priceController,
                   textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
+                      hintText: updateInformation.product.price.toString(),
                       labelText: "Item Price",
                       border: OutlineInputBorder(
                           borderSide: BorderSide(
@@ -67,9 +69,10 @@ class _UpdateItemState extends State<UpdateItem> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
-                  controller: categoryController..text = updateInformation.product.category!,
+                  controller: categoryController,
                   textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
+                      hintText: updateInformation.product.category!,
                       labelText: "Item Category",
                       border: OutlineInputBorder(
                           borderSide: BorderSide(
@@ -81,10 +84,9 @@ class _UpdateItemState extends State<UpdateItem> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
-                  controller: descriptionController
-                    ..text = updateInformation.product.description!,
-                  textInputAction: TextInputAction.next,
+                  controller: descriptionController,
                   decoration: InputDecoration(
+                      hintText: updateInformation.product.description!,
                       labelText: "Item Description",
                       border: OutlineInputBorder(
                           borderSide: BorderSide(
@@ -93,28 +95,55 @@ class _UpdateItemState extends State<UpdateItem> {
                       ))),
                 ),
               ),
-              Align(
-                  alignment: Alignment.bottomCenter,
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width / 2,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Products product = Products(id: updateInformation.product.id  , title: titleController.text, price: double.parse(priceController.text), image: updateInformation.product.image, category: categoryController.text, description: descriptionController.text);
-                        BlocProvider.of<ProductCubit>(context)
-                            .updateProducts(product, updateInformation.products);
-                        //Navigator.of(context).pop(product);
-                      },
-                      child: Text(
-                        'Update item',
-                        style: TextStyle(color: Colors.black),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        side: BorderSide(color: Colors.black, width: 3),
-                        // Background color
-                      ),
-                    ),
-                  )),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Align(
+                      alignment: Alignment.bottomCenter,
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width / 3,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Products product = Products(id: updateInformation.product.id, title: titleController.text, price: double.parse(priceController.text), image: updateInformation.product.image, category: categoryController.text, description: descriptionController.text);
+                            BlocProvider.of<ProductCubit>(context)
+                                .updateProducts(product, updateInformation.products,);
+                            Navigator.of(context).pop(product);
+                          },
+                          child: Text(
+                            'Update item',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            side: BorderSide(color: Colors.black, width: 3),
+                            // Background color
+                          ),
+                        ),
+                      ),),
+                  Align(
+                      alignment: Alignment.bottomCenter,
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width / 3,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Products product = Products(id: updateInformation.product.id, title: titleController.text, price: double.parse(priceController.text), image: updateInformation.product.image, category: categoryController.text, description: descriptionController.text);
+                            BlocProvider.of<ProductCubit>(context)
+                                .deleteProducts(updateInformation.products, updateInformation.productIndex,);
+                            Navigator.of(context).pop(product);
+                          },
+                          child: Text(
+                            'Delete item',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            side: BorderSide(color: Colors.black, width: 3),
+                            // Background color
+                          ),
+                        ),
+                      ),),
+                ],
+              ),
             ],
           ),
         ),

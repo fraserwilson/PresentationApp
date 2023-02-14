@@ -34,7 +34,8 @@ class _ShoppingListAppState extends State<ShoppingListApp> {
 
   getProducts() async {
     await BlocProvider.of<ProductCubit>(context).getAllProducts();
-    products = BlocProvider.of<ProductCubit>(context).state.mainProductState.products!;
+    products =
+        BlocProvider.of<ProductCubit>(context).state.mainProductState.products!;
   }
 
   @override
@@ -84,7 +85,7 @@ class _ShoppingListAppState extends State<ShoppingListApp> {
                   separatorBuilder: (BuildContext context, int index) {
                     return SizedBox(height: 10);
                   },
-                  itemCount: products.length ?? 0,
+                  itemCount: state.mainProductState.products?.length ?? 0,
                   itemBuilder: (context, index) {
                     return Center(
                       child: ListTile(
@@ -94,12 +95,15 @@ class _ShoppingListAppState extends State<ShoppingListApp> {
                           borderRadius: BorderRadius.circular(5),
                         ),
                         onTap: () {
-                          Navigator.pushNamed(
-                              context,
-                              updateItem, arguments: UpdateProducts(products[index], products));
+                          Navigator.pushNamed(context, updateItem,
+                              arguments: UpdateProducts(
+                                  state.mainProductState.products![index],
+                                  state.mainProductState.products!,
+                                  index),);
                         },
-                        title: Text(products[index].title ??
-                            "Item Could Not Be Loaded"),
+                        title: Text(
+                            state.mainProductState.products?[index].title ??
+                                "Item Could Not Be Loaded"),
                       ),
                     );
                   }),
@@ -263,23 +267,6 @@ class _ShoppingListAppState extends State<ShoppingListApp> {
                         // Background color
                       ),
                     ),
-                    ElevatedButton(
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (_) => showAlertDialog(context),
-                        );
-                      },
-                      child: Text(
-                        "Delete Products",
-                        style: TextStyle(color: Colors.black),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        side: BorderSide(color: Colors.black, width: 3),
-                        // Background color
-                      ),
-                    ),
                   ],
                 );
               }
@@ -292,63 +279,6 @@ class _ShoppingListAppState extends State<ShoppingListApp> {
               }
             },
           )),
-    );
-  }
-
-  Widget showAlertDialog(BuildContext con) {
-    return AlertDialog(
-      title: Text("Delete Item Dialog"),
-      content: SizedBox(
-        height: MediaQuery.of(con).size.height / 2,
-        child: Column(
-          children: [
-            Text("Which item would you like to delete?"),
-            Image.asset(
-              "assets/app_icons/delete_icon.jpg",
-              width: MediaQuery.of(context).size.width / 3,
-              height: MediaQuery.of(context).size.height / 3,
-            ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width / 2,
-              child: ElevatedButton(
-                onPressed: () {
-                  BlocProvider.of<ProductCubit>(context)
-                      .deleteProducts(products, 0);
-                  Navigator.pop(con);
-                },
-                child: Text(
-                  "Remove first item in list",
-                  style: TextStyle(color: Colors.black),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  side: BorderSide(color: Colors.black, width: 3),
-                  // Background color
-                ),
-              ),
-            ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width / 2,
-              child: ElevatedButton(
-                onPressed: () {
-                  BlocProvider.of<ProductCubit>(context)
-                      .deleteProducts(products, (products.length - 1));
-                  Navigator.pop(con);
-                },
-                child: Text(
-                  "Remove last item in list",
-                  style: TextStyle(color: Colors.black),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  side: BorderSide(color: Colors.black, width: 3),
-                  // Background color
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
     );
   }
 }

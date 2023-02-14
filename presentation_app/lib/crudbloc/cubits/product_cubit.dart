@@ -37,8 +37,8 @@ final ApiService repo;
   void deleteProducts(List<Products> products, int index) async{
     try{
       emit(LoadingState(state.mainProductState));
-      var deletedProducts = await repo.deleteProduct(products,index);
-      emit(LoadedState(state.mainProductState));
+      var newProducts = await repo.deleteProduct(products,index);
+      emit(LoadedState(state.mainProductState.copyWith(products: newProducts)));
     }catch(e){
       emit(ErrorState(state.mainProductState, e.toString()));
     }
