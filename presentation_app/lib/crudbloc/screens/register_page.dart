@@ -37,7 +37,7 @@ class _RegisterPageState extends State<RegisterPage> {
         centerTitle: true,
         iconTheme: IconThemeData(color: Colors.black),
         title: Text(
-          "Login Page",
+          "Register Page",
           style: TextStyle(color: Colors.black),
         ),
       ),
@@ -101,11 +101,11 @@ class _RegisterPageState extends State<RegisterPage> {
                   width: MediaQuery.of(context).size.width / 2,
                   child: ElevatedButton(
                     onPressed: () async {
-                      BlocProvider.of<AuthCubit>(context).LoginUser(
+                      BlocProvider.of<AuthCubit>(context).registerUser(
                           emailController.text.trim(), passwordController.text);
                     },
                     child: Text(
-                      "Login",
+                      "Register",
                       style: TextStyle(color: Colors.black),
                     ),
                     style: ElevatedButton.styleFrom(
