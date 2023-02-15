@@ -16,14 +16,14 @@ class _UpdateItemState extends State<UpdateItem> {
   final priceController = TextEditingController();
   final descriptionController = TextEditingController();
   final categoryController = TextEditingController();
-  bool isValid = true;
+  bool isValid = false;
 
   @override
   void initState() {
-    titleController.text = "Item Title";
-    priceController.text = "0.0";
-    descriptionController.text = "Item Description";
-    categoryController.text = "Item Category";
+    titleController.text = "";
+    priceController.text = "";
+    descriptionController.text = "";
+    categoryController.text = "";
   }
 
   @override
@@ -202,19 +202,12 @@ class _UpdateItemState extends State<UpdateItem> {
                         width: MediaQuery.of(context).size.width / 3,
                         child: ElevatedButton(
                           onPressed: () {
-                            Products product = Products(
-                                id: updateInformation.product.id,
-                                title: titleController.text,
-                                price: double.parse(priceController.text),
-                                image: updateInformation.product.image,
-                                category: categoryController.text,
-                                description: descriptionController.text);
                             BlocProvider.of<ProductCubit>(context)
                                 .deleteProducts(
                               updateInformation.products,
                               updateInformation.productIndex,
                             );
-                            Navigator.of(context).pop(product);
+                            Navigator.of(context).pop();
                           },
                           child: Text(
                             'Delete item',
